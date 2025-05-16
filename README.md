@@ -2,8 +2,8 @@
 
 ## 📑 Índice
 
-1. [🎯 Creación e Inicialización del Proyecto](#creacion-e-inicializacion-del-proyecto)
-2. [🚀 Lógica de la App – MainActivity](#analisis-de-mainactivity---app-con-camerax)
+1. 🎯 Creación e Inicialización del Proyecto
+2. 🚀 Lógica de la App – MainActivity
 
 
 ---
@@ -98,11 +98,7 @@ Reemplaza el contenido de tu archivo `res/layout/activity_main.xml` con lo sigui
 
 ---
 
-## 📷 Análisis de `MainActivity` - App con CameraX
-
-Este documento explica detalladamente el funcionamiento del archivo `MainActivity.java` de una aplicación Android que utiliza CameraX para capturar fotos, grabar videos y analizar imágenes en tiempo real.
-
----
+## 🚀 Lógica de la App - `MainActivity` - Flujo y casos de uso
 
 ### ✅ Métodos clave en MainActivity
 
