@@ -54,18 +54,14 @@ Además:
 - Usa `ImageCapture.takePicture(...)`.
 - Muestra mensaje de confirmación con `Toast` y `Log`.
 
-### `startRecording(Button videoButton)`
+### `startRecording()`
 - Relacionado con el caso de uso **VideoCapture**.
 - Inicia o detiene la grabación de video con audio.
 - Usa `Recorder.prepareRecording().start(...)`.
 - Al finalizar, se guarda el archivo y se notifica al usuario.
 
----
-
-## 🔬 Análisis en tiempo real: `LuminosityAnalyzer`
-
-Clase interna que implementa `ImageAnalysis.Analyzer`.
-
+### `LuminosityAnalyzer()`
+- Relacionado con el caso de uso **ImageAnalysis**
 - Accede al primer plano Y de la imagen (`YUV`).
 - Calcula la **luminosidad promedio** de la imagen.
 - Muestra el valor en el log.
@@ -100,8 +96,6 @@ Esta app se basa en CameraX y aprovecha sus principales funcionalidades con un e
 
 
 ## 📂 Código fuente con comentarios detallados
-
-### Descripción
 
 A continuación se presenta el código completo de `MainActivity.java`, organizado con secciones claramente delimitadas y comentarios explicativos. Esta estructura sirve como guía didáctica para desarrolladores principiantes que desean comprender cómo utilizar CameraX en una aplicación Android. Cada bloque del código está documentado para mostrar su propósito, uso y relación con los *Use Cases* de CameraX: **Preview**, **ImageCapture**, **VideoCapture** e **ImageAnalysis**.
 
