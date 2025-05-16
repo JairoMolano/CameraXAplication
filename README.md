@@ -1,11 +1,110 @@
+# 📸 CameraX Application – Documentación
 
-# 📷 Análisis de `MainActivity` - App con CameraX
+## 📑 Índice
+
+1. [🎯 Creación e Inicialización del Proyecto](#creacion-e-inicializacion-del-proyecto)
+2. [🚀 Lógica de la App – MainActivity](#analisis-de-mainactivity---app-con-camerax)
+
+
+---
+
+## 🎯 Creación e Inicialización del Proyecto
+
+### 🛠️ Creación del Proyecto en Android Studio
+
+1. Abre Android Studio.
+2. Ve a `File > New > New Project`.
+3. Selecciona **Empty Activity** y haz clic en **Next**.
+4. Asigna un nombre al proyecto (ej. `CameraXAplication`).
+5. Asegúrate de seleccionar **Java** como lenguaje.
+6. Establece el **Minimum SDK** en `API 21 (Lollipop)` o superior.
+7. Haz clic en **Finish** y espera a que el proyecto se cree.
+
+---
+
+### 📦 Dependencias necesarias
+
+Agrega las siguientes líneas en tu archivo `app/build.gradle` dentro de la sección `dependencies`:
+
+```gradle
+implementation "androidx.camera:camera-core:1.3.0"
+implementation "androidx.camera:camera-camera2:1.3.0"
+implementation "androidx.camera:camera-lifecycle:1.3.0"
+implementation "androidx.camera:camera-view:1.3.0"
+implementation "androidx.camera:camera-extensions:1.3.0"
+implementation "androidx.camera:camera-video:1.3.0"
+```
+
+---
+
+### 🔐 Permisos requeridos
+
+Agrega lo siguiente en tu archivo `AndroidManifest.xml` dentro del `<manifest>`:
+
+```xml
+<uses-feature
+    android:name="android.hardware.camera"
+    android:required="false" />
+
+<uses-permission android:name="android.permission.CAMERA" />
+<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+<uses-permission android:name="android.permission.RECORD_AUDIO" />
+```
+
+---
+
+### 🎨 Diseño de la Interfaz XML
+
+Reemplaza el contenido de tu archivo `res/layout/activity_main.xml` con lo siguiente:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/captureButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="📸 Foto"
+        app:layout_constraintBottom_toTopOf="@id/videoButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/videoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🎥 Grabar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="32dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+
+---
+
+## 📷 Análisis de `MainActivity` - App con CameraX
 
 Este documento explica detalladamente el funcionamiento del archivo `MainActivity.java` de una aplicación Android que utiliza CameraX para capturar fotos, grabar videos y analizar imágenes en tiempo real.
 
 ---
 
-## ✅ Métodos clave en MainActivity
+### ✅ Métodos clave en MainActivity
 
 La clase `MainActivity` contiene **7 métodos principales** que controlan el flujo de la aplicación:
 
@@ -19,9 +118,9 @@ La clase `MainActivity` contiene **7 métodos principales** que controlan el flu
 
 ---
 
-## 🔁 Flujo general de la aplicación
+### 🔁 Flujo general de la aplicación
 
-### 1. `onCreate()`
+#### 1. `onCreate()`
 
 - Punto de entrada de la actividad.
 - Se inicializa el layout (`activity_main.xml`) y los botones de foto y video.
@@ -29,7 +128,7 @@ La clase `MainActivity` contiene **7 métodos principales** que controlan el flu
 - Si faltan permisos, se solicitan.
 - Si están concedidos, se llama a `startCamera()` para iniciar la cámara.
 
-### 2. `startCamera()`
+#### 2. `startCamera()`
 
 Configura y gestiona los **use cases (casos de uso)** de CameraX. Estos son:
 
@@ -46,21 +145,21 @@ Además:
 
 ---
 
-## 📸 Métodos que ejecutan los *use cases*
+### 📸 Métodos que ejecutan los *use cases*
 
-### `takePhoto()`
+#### `takePhoto()`
 - Relacionado con el caso de uso **ImageCapture**.
 - Captura una foto y la guarda como archivo local.
 - Usa `ImageCapture.takePicture(...)`.
 - Muestra mensaje de confirmación con `Toast` y `Log`.
 
-### `startRecording()`
+#### `startRecording()`
 - Relacionado con el caso de uso **VideoCapture**.
 - Inicia o detiene la grabación de video con audio.
 - Usa `Recorder.prepareRecording().start(...)`.
 - Al finalizar, se guarda el archivo y se notifica al usuario.
 
-### `LuminosityAnalyzer()`
+#### `LuminosityAnalyzer()`
 - Relacionado con el caso de uso **ImageAnalysis**
 - Accede al primer plano Y de la imagen (`YUV`).
 - Calcula la **luminosidad promedio** de la imagen.
@@ -69,23 +168,23 @@ Además:
 
 ---
 
-## 🔐 Gestión de permisos
+### 🔐 Gestión de permisos
 
-### `allPermissionsGranted()`
+#### `allPermissionsGranted()`
 - Verifica que todos los permisos requeridos estén concedidos.
 
-### `onRequestPermissionsResult(...)`
+#### `onRequestPermissionsResult(...)`
 - Llamado cuando el usuario responde a la solicitud de permisos.
 - Si se conceden, inicia la cámara.
 - Si se niegan, muestra un mensaje y cierra la app.
 
 ---
 
-## 🧠 Resumen Final
+### 🧠 Resumen Final
 
 Esta app se basa en CameraX y aprovecha sus principales funcionalidades con un enfoque modular y guiado por el ciclo de vida, ideal para quienes quieren aprender a usar la cámara en Android.
 
-### 🗺️ Mapa conceptual
+#### 🗺️ Mapa conceptual
 
 | Caso de uso       | Método relacionado     | Función principal                     |
 |------------------|------------------------|--------------------------------------|
@@ -94,8 +193,9 @@ Esta app se basa en CameraX y aprovecha sus principales funcionalidades con un e
 | VideoCapture      | `startRecording()`      | Grabar y guardar video               |
 | ImageAnalysis     | `LuminosityAnalyzer`    | Analizar cada fotograma (luminosidad) |
 
+---
 
-## 📂 Código fuente con comentarios detallados
+### 📂 Código fuente con comentarios detallados
 
 A continuación se presenta el código completo de `MainActivity.java`, organizado con secciones claramente delimitadas y comentarios explicativos. Esta estructura sirve como guía didáctica para desarrolladores principiantes que desean comprender cómo utilizar CameraX en una aplicación Android. Cada bloque del código está documentado para mostrar su propósito, uso y relación con los *Use Cases* de CameraX: **Preview**, **ImageCapture**, **VideoCapture** e **ImageAnalysis**.
 
