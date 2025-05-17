@@ -139,6 +139,10 @@ Además:
 - Se obtiene una instancia de `ProcessCameraProvider` para gestionar el ciclo de vida de la cámara.
 - Se vinculan los use cases al ciclo de vida de la actividad con `bindToLifecycle(...)`.
 
+#### ⤵️ Diagrama
+
+![Descripción del diagrama](diagrama.png)
+
 ---
 
 ### 📸 Métodos que ejecutan los *use cases*
