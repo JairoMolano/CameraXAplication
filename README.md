@@ -1,6 +1,11 @@
 # 📸 CameraX Application with Java - Documentation
 
+Implementation of CameraX using Java
+
 ## 📁 Table of Contents
+
+This project is a fully documented guide and reference code for using CameraX in Java.
+It includes step-by-step explanations, lifecycle-based implementation and examples .
 
 1. 🎯 Project Creation and Initialization
 2. 🚀 App Logic - MainActivity and Use Cases
