@@ -1,30 +1,28 @@
-# 📸 CameraX Application – Documentación
+# 📸 CameraX Application with Java - Documentation
 
-## 📑 Índice
+## 📁 Table of Contents
 
-1. 🎯 Creación e Inicialización del Proyecto
-2. 🚀 Lógica de la App – MainActivity
-
-
----
-
-## 🎯 Creación e Inicialización del Proyecto
-
-### 🛠️ Creación del Proyecto en Android Studio
-
-1. Abre Android Studio.
-2. Ve a `File > New > New Project`.
-3. Selecciona **Empty Activity** y haz clic en **Next**.
-4. Asigna un nombre al proyecto (ej. `CameraXAplication`).
-5. Asegúrate de seleccionar **Java** como lenguaje.
-6. Establece el **Minimum SDK** en `API 21 (Lollipop)` o superior.
-7. Haz clic en **Finish** y espera a que el proyecto se cree.
+1. 🎯 Project Creation and Initialization
+2. 🚀 App Logic - MainActivity and Use Cases
+3. 📚 Additional Resources
 
 ---
 
-### 📦 Dependencias necesarias
+## 🎯 Project Creation and Initialization
 
-Agrega las siguientes líneas en tu archivo `app/build.gradle` dentro de la sección `dependencies`:
+### 🛠️ Creating a New Project in Android Studio
+
+1. Open **Android Studio**.
+2. Select `File > New > New Project`.
+3. Choose the **Empty Activity** template.
+4. Set the project name (e.g., `CameraXApplication`).
+5. Choose **Java** as the language.
+6. Set the **Minimum SDK** to `API 21: Lollipop`.
+7. Click **Finish** to create the project.
+
+### 📦 Required Dependencies
+
+Add the following dependencies to your `app/build.gradle` file under the `dependencies` block:
 
 ```gradle
 implementation "androidx.camera:camera-core:1.3.0"
@@ -35,27 +33,24 @@ implementation "androidx.camera:camera-extensions:1.3.0"
 implementation "androidx.camera:camera-video:1.3.0"
 ```
 
----
+These libraries represent the core CameraX components for preview, capture, lifecycle management, view rendering, and video features.
 
-### 🔐 Permisos requeridos
+### 🔐 Permissions
 
-Agrega lo siguiente en tu archivo `AndroidManifest.xml` dentro del `<manifest>`:
+Add the following lines to your `AndroidManifest.xml` file within the `<manifest>` tag:
 
 ```xml
-<uses-feature
-    android:name="android.hardware.camera"
-    android:required="false" />
-
+<uses-feature android:name="android.hardware.camera" android:required="false" />
 <uses-permission android:name="android.permission.CAMERA" />
 <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 <uses-permission android:name="android.permission.RECORD_AUDIO" />
 ```
 
----
+These permissions and features are required for camera access, media storage, and audio recording for video capture.
 
-### 🎨 Diseño de la Interfaz XML
+### 🎨 Layout
 
-Reemplaza el contenido de tu archivo `res/layout/activity_main.xml` con lo siguiente:
+Replace the contents of `res/layout/activity_main.xml` with the following layout configuration:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -78,7 +73,7 @@ Reemplaza el contenido de tu archivo `res/layout/activity_main.xml` con lo sigui
         android:id="@+id/captureButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="📸 Foto"
+        android:text="📸 Capture"
         app:layout_constraintBottom_toTopOf="@id/videoButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -88,7 +83,7 @@ Reemplaza el contenido de tu archivo `res/layout/activity_main.xml` con lo sigui
         android:id="@+id/videoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="🎥 Grabar"
+        android:text="🎥 Record"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -96,137 +91,71 @@ Reemplaza el contenido de tu archivo `res/layout/activity_main.xml` con lo sigui
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
 
----
+### 🧠 MainActivity
 
-## 🚀 Lógica de la App - `MainActivity` - Flujo y casos de uso
-
-### ✅ Métodos clave en MainActivity
-
-La clase `MainActivity` contiene **7 métodos principales** que controlan el flujo de la aplicación:
-
-- `onCreate`
-- `startCamera`
-- `takePhoto`
-- `startRecording`
-- `LuminosityAnalyzer` (clase interna con método `analyze`)
-- `allPermissionsGranted`
-- `onRequestPermissionsResult`
-
----
-
-### 🔁 Flujo general de la aplicación
-
-#### 1. `onCreate()`
-
-- Punto de entrada de la actividad.
-- Se inicializa el layout (`activity_main.xml`) y los botones de foto y video.
-- Se verifica si los permisos han sido concedidos mediante `allPermissionsGranted()`.
-- Si faltan permisos, se solicitan.
-- Si están concedidos, se llama a `startCamera()` para iniciar la cámara.
-
-#### 2. `startCamera()`
-
-Configura y gestiona los **use cases (casos de uso)** de CameraX. Estos son:
-
-| Caso de uso       | Descripción |
-|------------------|-------------|
-| `Preview`         | Muestra en pantalla lo que ve la cámara (vista previa). |
-| `ImageCapture`    | Permite capturar fotos. |
-| `VideoCapture`    | Permite grabar videos. |
-| `ImageAnalysis`   | Permite analizar imágenes en tiempo real. Ejemplo: luminosidad. |
-
-Además:
-- Se obtiene una instancia de `ProcessCameraProvider` para gestionar el ciclo de vida de la cámara.
-- Se vinculan los use cases al ciclo de vida de la actividad con `bindToLifecycle(...)`.
-
-#### ⤵️ Diagrama
-
-![Descripción del diagrama](diagrama.png)
-
----
-
-### 📸 Métodos que ejecutan los *use cases*
-
-#### `takePhoto()`
-- Relacionado con el caso de uso **ImageCapture**.
-- Captura una foto y la guarda como archivo local.
-- Usa `ImageCapture.takePicture(...)`.
-- Muestra mensaje de confirmación con `Toast` y `Log`.
-
-#### `startRecording()`
-- Relacionado con el caso de uso **VideoCapture**.
-- Inicia o detiene la grabación de video con audio.
-- Usa `Recorder.prepareRecording().start(...)`.
-- Al finalizar, se guarda el archivo y se notifica al usuario.
-
-#### `LuminosityAnalyzer()`
-- Relacionado con el caso de uso **ImageAnalysis**
-- Accede al primer plano Y de la imagen (`YUV`).
-- Calcula la **luminosidad promedio** de la imagen.
-- Muestra el valor en el log.
-- Se puede extender para detectar objetos, códigos QR, etc.
-
----
-
-### 🔐 Gestión de permisos
-
-#### `allPermissionsGranted()`
-- Verifica que todos los permisos requeridos estén concedidos.
-
-#### `onRequestPermissionsResult(...)`
-- Llamado cuando el usuario responde a la solicitud de permisos.
-- Si se conceden, inicia la cámara.
-- Si se niegan, muestra un mensaje y cierra la app.
-
----
-
-### 🧠 Resumen Final
-
-Esta app se basa en CameraX y aprovecha sus principales funcionalidades con un enfoque modular y guiado por el ciclo de vida, ideal para quienes quieren aprender a usar la cámara en Android.
-
-#### 🗺️ Mapa conceptual
-
-| Caso de uso       | Método relacionado     | Función principal                     |
-|------------------|------------------------|--------------------------------------|
-| Preview           | Dentro de `startCamera` | Mostrar la vista previa en pantalla |
-| ImageCapture      | `takePhoto()`           | Capturar y guardar fotos             |
-| VideoCapture      | `startRecording()`      | Grabar y guardar video               |
-| ImageAnalysis     | `LuminosityAnalyzer`    | Analizar cada fotograma (luminosidad) |
-
----
-
-### 📂 Código fuente con comentarios detallados
-
-A continuación se presenta el código completo de `MainActivity.java`, organizado con secciones claramente delimitadas y comentarios explicativos. Esta estructura sirve como guía didáctica para desarrolladores principiantes que desean comprender cómo utilizar CameraX en una aplicación Android. Cada bloque del código está documentado para mostrar su propósito, uso y relación con los *Use Cases* de CameraX: **Preview**, **ImageCapture**, **VideoCapture** e **ImageAnalysis**.
+Replace the contents of `MainActivity.java` with the next code:
 
 ```java
-package com.example.cameraxaplication;
+package com.example.cameraxapplication;
 
-import ...
+import android.Manifest;
+import android.content.ContentValues;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ImageAnalysis;
+import androidx.camera.core.ImageCapture;
+import androidx.camera.core.ImageCaptureException;
+import androidx.camera.core.ImageProxy;
+import androidx.camera.core.Preview;
+import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.video.FallbackStrategy;
+import androidx.camera.video.MediaStoreOutputOptions;
+import androidx.camera.video.PendingRecording;
+import androidx.camera.video.Quality;
+import androidx.camera.video.QualitySelector;
+import androidx.camera.video.Recorder;
+import androidx.camera.video.Recording;
+import androidx.camera.video.VideoCapture;
+import androidx.camera.video.VideoRecordEvent;
+import androidx.camera.view.PreviewView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import com.google.common.util.concurrent.ListenableFuture;
+import java.io.File;
+import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
-    // ------ Variables y constantes principales ------------------------------------------------------------------------------------------------------------
-
+    // Constants
     private static final int REQUEST_CODE_PERMISSIONS = 10;
-    private static final String[] REQUIRED_PERMISSIONS = new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
+    private static final String[] REQUIRED_PERMISSIONS = new String[]{
+            Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO
+    };
     private static final String TAG = "CameraXApp";
 
+    // CameraX Components
     private PreviewView previewView;
     private ImageCapture imageCapture;
     private VideoCapture<Recorder> videoCapture;
     private Recording recording;
 
-    // -------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-    // --- Método que se llama al iniciar la actividad -------------------------------------------------------------------------------------------------------
-
-    //  - Infla el layout activity_main.xml.
-    //  - Inicializa la vista de la cámara y los botones.
-    //  - Verifica si los permisos están concedidos. Si no, los solicita.
-    //  - Configura el botón de foto y el botón de video con sus respectivos eventos onClick.
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -235,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
         previewView = findViewById(R.id.previewView);
         Button captureButton = findViewById(R.id.captureButton);
         Button videoButton = findViewById(R.id.videoButton);
-
 
         if (allPermissionsGranted()) {
             startCamera();
@@ -249,78 +177,60 @@ public class MainActivity extends AppCompatActivity {
             if (recording != null) {
                 recording.stop();
                 recording = null;
-                videoButton.setText("🎥 Grabar");
+                videoButton.setText("🎥 Record");
             } else {
                 startRecording(videoButton);
             }
         });
     }
 
-    // -----------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-   //  --- Método que inicia y configura los distintos casos de uso de CameraX ------------------------------------------------------------------------------------
-
+    /**
+     * Initializes and binds CameraX use cases to the lifecycle.
+     */
     private void startCamera() {
-        ListenableFuture<ProcessCameraProvider> cameraProviderFuture =
-                ProcessCameraProvider.getInstance(this);
+        ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(this);
 
         cameraProviderFuture.addListener(() -> {
             try {
                 ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
 
-                // Preview
+                // Preview use case
                 Preview preview = new Preview.Builder().build();
                 preview.setSurfaceProvider(previewView.getSurfaceProvider());
 
-                // ImageCapture
+                // ImageCapture use case
                 imageCapture = new ImageCapture.Builder().build();
 
-                // VideoCapture
+                // VideoCapture use case
                 Recorder recorder = new Recorder.Builder()
-                        .setQualitySelector(
-                                QualitySelector.from(
-                                        Quality.HD,
-                                        FallbackStrategy.lowerQualityOrHigherThan(Quality.SD)))
+                        .setQualitySelector(QualitySelector.from(
+                                Quality.HD,
+                                FallbackStrategy.lowerQualityOrHigherThan(Quality.SD)))
                         .build();
                 videoCapture = VideoCapture.withOutput(recorder);
 
-                // ImageAnalysis
+                // ImageAnalysis use case
                 ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                         .build();
-                imageAnalysis.setAnalyzer(ContextCompat.getMainExecutor(this), new LuminosityAnalyzer());
+                imageAnalysis.setAnalyzer(getExecutor(), new LuminosityAnalyzer());
 
-                // Cámara trasera
                 CameraSelector cameraSelector = new CameraSelector.Builder()
                         .requireLensFacing(CameraSelector.LENS_FACING_BACK)
                         .build();
 
-                // Reemplaza cualquier uso previo
                 cameraProvider.unbindAll();
+                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture, videoCapture, imageAnalysis);
 
-                // Enlaza todos los use cases
-                cameraProvider.bindToLifecycle(
-                        this,
-                        cameraSelector,
-                        preview,
-                        imageCapture,
-                        videoCapture,
-                        imageAnalysis
-                );
-
-            } catch (ExecutionException | InterruptedException e) {
-                Log.e(TAG, "Error al iniciar la cámara: ", e);
+            } catch (Exception e) {
+                Log.e(TAG, "Camera initialization failed", e);
             }
-        }, ContextCompat.getMainExecutor(this));
+        }, getExecutor());
     }
 
-    // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-    // --- Método captura una foto -> Caso de uso: ImageCapture ----------------------------------------------------------------------------------------------------
-
+    /**
+     * Captures a photo and saves it to local storage.
+     */
     private void takePhoto() {
         if (imageCapture == null) return;
 
@@ -331,28 +241,24 @@ public class MainActivity extends AppCompatActivity {
         ImageCapture.OutputFileOptions outputOptions =
                 new ImageCapture.OutputFileOptions.Builder(photoFile).build();
 
-        imageCapture.takePicture(outputOptions, getExecutor(),
-                new ImageCapture.OnImageSavedCallback() {
-                    @Override
-                    public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-                        String msg = "Foto guardada: " + photoFile.getAbsolutePath();
-                        Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, msg);
-                    }
+        imageCapture.takePicture(outputOptions, getExecutor(), new ImageCapture.OnImageSavedCallback() {
+            @Override
+            public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
+                String msg = "Photo saved: " + photoFile.getAbsolutePath();
+                Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT).show();
+                Log.d(TAG, msg);
+            }
 
-                    @Override
-                    public void onError(@NonNull ImageCaptureException exception) {
-                        Log.e(TAG, "Error al capturar la foto: ", exception);
-                    }
-                });
+            @Override
+            public void onError(@NonNull ImageCaptureException exception) {
+                Log.e(TAG, "Photo capture failed: ", exception);
+            }
+        });
     }
 
-    // ------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-    // --- método inicia la grabación de video -> Caso de uso: VideoCapture ---------------------------------------------------------------------------------------
-
+    /**
+     * Starts or stops video recording depending on the current state.
+     */
     private void startRecording(Button videoButton) {
         if (videoCapture == null) return;
 
@@ -364,42 +270,38 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        String name = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.US)
+        String fileName = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.US)
                 .format(new Date());
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name);
+        contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
         contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4");
 
-        MediaStoreOutputOptions mediaStoreOutputOptions =
-                new MediaStoreOutputOptions.Builder(
-                        getContentResolver(),
-                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-                ).setContentValues(contentValues).build();
+        MediaStoreOutputOptions outputOptions = new MediaStoreOutputOptions.Builder(
+                getContentResolver(), MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
+                .setContentValues(contentValues)
+                .build();
 
         PendingRecording pendingRecording = videoCapture.getOutput()
-                .prepareRecording(this, mediaStoreOutputOptions)
+                .prepareRecording(this, outputOptions)
                 .withAudioEnabled();
 
-        recording = pendingRecording.start(ContextCompat.getMainExecutor(this),
-                videoRecordEvent -> {
-                    if (videoRecordEvent instanceof VideoRecordEvent.Finalize) {
-                        Uri uri = ((VideoRecordEvent.Finalize) videoRecordEvent)
-                                .getOutputResults().getOutputUri();
-                        String msg = "Video guardado: " + uri;
-                        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, msg);
-                    }
-                });
-        videoButton.setText("⏹️ Detener");
+        recording = pendingRecording.start(getExecutor(), videoRecordEvent -> {
+            if (videoRecordEvent instanceof VideoRecordEvent.Finalize) {
+                Uri uri = ((VideoRecordEvent.Finalize) videoRecordEvent).getOutputResults().getOutputUri();
+                String msg = "Video saved: " + uri;
+                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+                Log.d(TAG, msg);
+            }
+        });
+
+        videoButton.setText("⏹️ Stop");
     }
 
-    // --------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-    //  --- Realiza análisis en tiempo real del brillo (luminosidad) -> Caso de uso: ImageAnalysis -------------------------------------------------------------------
-
-    public class LuminosityAnalyzer implements ImageAnalysis.Analyzer {
+    /**
+     * Analyzer for measuring average brightness (luminance) from camera frames.
+     */
+    public static class LuminosityAnalyzer implements ImageAnalysis.Analyzer {
         private static final String TAG = "LuminosityAnalyzer";
 
         @Override
@@ -414,8 +316,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             double luma = sum / (double) data.length;
-            Log.d(TAG, "Luminosidad promedio: " + luma);
-
+            Log.d(TAG, "Average brightness: " + luma);
             image.close();
         }
     }
@@ -424,12 +325,9 @@ public class MainActivity extends AppCompatActivity {
         return ContextCompat.getMainExecutor(this);
     }
 
-    // -------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-    //  --- Metodo que Verifica que todos los permisos requeridos (cámara y audio) hayan sido concedidos por el usuario -------------------------------------------------
-
+    /**
+     * Checks if all required permissions are granted.
+     */
     private boolean allPermissionsGranted() {
         for (String permission : REQUIRED_PERMISSIONS) {
             if (ContextCompat.checkSelfPermission(this, permission)
@@ -440,11 +338,9 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-    // --- Metodo que maneja la respuesta del usuario cuando se solicitan permisos. Si los concede, se inicia la cámara. Si no, se muestra un mensaje y se cierra la app ---
-
+    /**
+     * Handles user response to runtime permission requests.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
@@ -454,15 +350,105 @@ public class MainActivity extends AppCompatActivity {
             if (allPermissionsGranted()) {
                 startCamera();
             } else {
-                Toast.makeText(this,
-                        "Permisos no concedidos por el usuario.",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Permissions not granted by the user.", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
     }
-
-    // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 }
 ```
+
+---
+
+## 🚀 App Logic - MainActivity and Use Cases
+
+### ✅ Key Methods in MainActivity
+
+The `MainActivity` class contains **7 main methods** that control the application's flow:
+
+- `onCreate`
+- `startCamera`
+- `takePhoto`
+- `startRecording`
+- `LuminosityAnalyzer` (inner class with `analyze` method)
+- `allPermissionsGranted`
+- `onRequestPermissionsResult`
+
+### 🔁 General Application Flow
+
+#### 1. `onCreate()`
+
+- Entry point of the activity.
+- Initializes the layout (`activity_main.xml`) and photo/video buttons.
+- Checks if permissions have been granted using `allPermissionsGranted()`.
+- If permissions are missing, requests them.
+- If granted, calls `startCamera()` to start the camera.
+
+#### 2. `startCamera()`
+
+Sets up and manages the CameraX **use cases**. These include:
+
+| Use Case         | Description |
+|------------------|-------------|
+| `Preview`         | Displays the camera feed on screen. |
+| `ImageCapture`    | Allows taking photos. |
+| `VideoCapture`    | Allows recording videos. |
+| `ImageAnalysis`   | Enables real-time image analysis (e.g., luminosity). |
+
+Additionally:
+- Retrieves an instance of `ProcessCameraProvider` to manage the camera lifecycle.
+- Binds the use cases to the activity lifecycle using `bindToLifecycle(...)`.
+
+#### ⤵️ Diagram
+
+![Diagram Description](diagrama.png)
+
+### 📸 Methods Executing the Use Cases
+
+#### `takePhoto()`
+- Related to the **ImageCapture** use case.
+- Captures a photo and saves it as a local file.
+- Uses `ImageCapture.takePicture(...)`.
+- Shows a confirmation message with `Toast` and `Log`.
+
+#### `startRecording()`
+- Related to the **VideoCapture** use case.
+- Starts or stops video recording with audio.
+- Uses `Recorder.prepareRecording().start(...)`.
+- On finish, saves the file and notifies the user.
+
+#### `LuminosityAnalyzer()`
+- Related to the **ImageAnalysis** use case.
+- Accesses the Y-plane of the image (`YUV` format).
+- Calculates the **average luminosity** of the frame.
+- Logs the value to Logcat.
+- Can be extended for object detection, QR codes, etc.
+
+### 🔐 Permission Handling
+
+#### `allPermissionsGranted()`
+- Checks whether all required permissions have been granted.
+
+#### `onRequestPermissionsResult(...)`
+- Called when the user responds to the permissions request dialog.
+- If granted, starts the camera.
+- If denied, shows a message and closes the app.
+
+### 🧠 Final Summary
+
+This app is built using CameraX and takes advantage of its main features through a modular and lifecycle-aware approach — ideal for those wanting to learn how to work with the camera in Android.
+
+#### 🗺️ Conceptual Map
+
+| Use Case         | Related Method          | Main Function                          |
+|------------------|-------------------------|----------------------------------------|
+| Preview           | Inside `startCamera`     | Display the camera preview             |
+| ImageCapture      | `takePhoto()`            | Capture and save photos                |
+| VideoCapture      | `startRecording()`       | Record and save videos                 |
+| ImageAnalysis     | `LuminosityAnalyzer`     | Analyze each frame (e.g., luminosity)  |
+
+---
+
+### 📚 Additional Resources
+
+- 📖 [Official CameraX Documentation (Android Developers)](https://developer.android.com/media/camera/camerax)
